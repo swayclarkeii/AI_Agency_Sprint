@@ -1,0 +1,83 @@
+# Fetcher v4 – Prompt Template
+
+## Context
+Collect new public post metadata for each listed competitor using APIs or exports, not direct scraping.
+
+## Modes
+Mode: "DRY_RUN" or "LIVE"
+Verbosity: "QUIET" | "NORMAL" | "DEBUG"
+MAX_POSTS_PER_CREATOR: 20
+WINDOW_DAYS: 7
+
+## Input
+JSON config including:
+- mode, run_id, absolute_now_utc
+- since_window_days
+- targets[] (creator_name, platform, handle_or_channel_id, source_url)
+- state (last_run_at, already_fetched_post_ids, rate_limits)
+- output_contract (write_destination, dataset_name, table_or_tab)
+
+## Tasks
+1. Validate config (abort if required fields missing).
+2. Plan incremental window (since last_run_at or WINDOW_DAYS).
+3. For each target, query via allowed connector or CSV feed.
+4. Normalize posts into schema below.
+5. Dedupe against already_fetched_post_ids.
+6. Limit to MAX_POSTS_PER_CREATOR newest posts.
+7. Return structured JSON + logs.
+
+## Output Schema
+{
+  "status": "ok",
+  "posts": [
+    {
+      "FetcherVersion": "v4",
+      "RunId": "fetch_2025-10-16T08:00:00Z",
+      "Creator": "The Calm Parent",
+      "Platform": "instagram",
+      "HandleOrChannelId": "calmparenttips",
+      "SourceURL": "https://www.instagram.com/calmparenttips/",
+      "PostId": "ig:9876543210",
+      "PostURL": "https://www.instagram.com/p/xyz/",
+      "PublishedAt": "2025-10-14T19:00:00Z",
+      "CollectedAt": "2025-10-16T08:00:00Z",
+      "Text": "Stop tantrums with this simple shift...",
+      "HookCandidate": "Stop tantrums with this simple shift...",
+      "Metrics": {"Views": 89000, "Likes": 5400, "Comments": 110},
+      "ThumbnailURL": "https://instagram.com/p/xyz/cover.jpg",
+      "Language": "en",
+      "Tags": ["parenting","tantrums"],
+      "SentimentHint": "Positive",
+      "EngagementPriorityScore": 89000*1.0 + 5400*0.1 + 110*0.2,
+      "Provenance": {
+        "Connector": "instagram_graph",
+        "Cursor": "PAGE_TOKEN_1",
+        "FetchedWith": "api",
+        "SinceWindowDays": 7
+      }
+    }
+  ],
+  "run_stats": {
+    "targets_total": 1,
+    "targets_succeeded": 1,
+    "targets_failed": 0,
+    "posts_returned": 1,
+    "posts_deduped": 0,
+    "duration_ms": 1200
+  },
+  "log": [{"level":"INFO","msg":"Fetched 1 creator (20 posts max per target)"}]
+}
+
+## Guardrails
+- No scraping; use official APIs, CSV, or exports.
+- Only fetch posts newer than WINDOW_DAYS.
+- Dedupe by PostId + Platform.
+- Default SentimentHint="Neutral" if not inferable.
+- If all sources fail, return {"status":"error","errors":[...]}.
+
+## CLEAR
+- Clarity: Schema fields consistent with Analyzer
+- Logic: Validate → Fetch → Normalize → Output
+- Efficiency: Incremental fetch + dedupe
+- Accuracy: 7-day window guard
+- Reusability: Direct Analyzer input compatibility

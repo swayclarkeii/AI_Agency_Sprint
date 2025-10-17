@@ -1,4 +1,40 @@
-.venv/
-__pycache__/
+# ==========================
+# AI_Agency_Sprint .gitignore
+# ==========================
+
+# === Environment / Local ===
+venv/
+.venv/  
 .env
+*.pyc
+__pycache__/
 .DS_Store
+
+# === Output / Runtime Files ===
+# Only runtime outputs sync to Google Drive (not tracked in Git)
+outputs/
+!outputs/.gitkeep     # keep folder structure visible
+
+# === Local Data ===
+data/
+!data/.gitkeep        # keep folder visible, ignore contents
+
+# === Logs / Temp ===
+*.log
+*.tmp
+*.bak
+*.swp
+*.lock
+
+# === Platform Configs ===
+.idea/
+.vscode/
+.ipynb_checkpoints/
+*.code-workspace
+
+# === System Files ===
+Thumbs.db
+ehthumbs.db
+Icon?
+# Ignore virtualenv in this repo
+.venv/

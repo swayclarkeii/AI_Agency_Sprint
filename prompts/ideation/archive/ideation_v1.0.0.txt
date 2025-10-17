@@ -1,0 +1,129 @@
+
+
+📘 Ideation_v1.0.0 – Prompt Template
+
+Context
+
+Transform analyzed competitor data into new creative concepts and ready-to-use content drafts.
+The Ideation module consumes structured outputs from Analyzer_v4 (topics, hooks, archetypes, takeaways) and generates cross-platform ideas—short-form scripts, newsletter drafts, and LinkedIn post hooks.
+
+Fetcher → Analyzer → Ideation completes the end-to-end creative loop:
+
+Fetcher_v4 → collects data
+Analyzer_v4 → scores & interprets
+Ideation_v1.0.0 → creates new assets & formats
+
+
+⸻
+
+Modes
+
+Mode: "DRY_RUN" or "LIVE"
+Verbosity: "QUIET" | "NORMAL" | "DEBUG"
+MAX_IDEAS: 10
+FORMATS: ["short_form_video","newsletter_email","linkedin_post"]
+
+⸻
+
+Input
+
+Structured JSON (Analyzer output or sheet export) containing:
+
+Creator, Platform, PostURL, Topic, HookLine, HookArchetype,
+Angle, Takeaways[], EngagementScore, CommentSentiment
+
+
+⸻
+
+Tasks
+
+Step 1 – Trend & Topic Extraction
+	1.	Rank analyzed posts by EngagementScore.
+	2.	Identify recurring themes, angles, or archetypes.
+	3.	Select 3-5 high-potential topics.
+
+Step 2 – Hook & Idea Generation
+	1.	For each topic, create 2-3 fresh hooks or talking points.
+	2.	Combine Analyzer’s HookArchetype + Angle + Takeaways to shape the idea.
+	3.	Output as concise statements, each under 90 characters where possible.
+
+Step 3 – Format Drafts
+
+For each selected idea, produce adapted outputs:
+
+Format	Structure	Length
+short_form_video	Hook → Example → Emotional turn → CTA	60-90 sec script
+newsletter_email	Subject line → Lead paragraph → Lesson → CTA	150-200 words
+linkedin_post	Hook line → Micro-story → Insight → Hashtag set	200-300 words
+
+Each format must align with internal tone guidelines and past dataset examples.
+
+Step 4 – Cross-Reference Internal Database
+
+Reference existing internal hook or script style database (if available).
+Maintain tone consistency with historical brand voice.
+
+⸻
+
+Output Format
+
+{
+  "metadata": {
+    "version": "1.0.0",
+    "source_version": {"fetcher":"v4","analyzer":"v4"},
+    "mode": "LIVE",
+    "generated_at": "2025-10-17T00:00:00Z"
+  },
+  "topics": [
+    {
+      "topic": "Parenting Under Pressure",
+      "derived_from": ["Jason Holmes","The Calm Parent"],
+      "reasoning": "High engagement and relatable pain-point in Analyzer results."
+    }
+  ],
+  "ideas": [
+    {
+      "idea_title": "Stop Reacting, Start Coaching",
+      "platform_targets": ["instagram","tiktok","linkedin"],
+      "source_topic": "Parenting Under Pressure",
+      "hook": "Your kid’s meltdown isn’t personal—it’s training data.",
+      "angle": "emotional",
+      "archetype": "curiosity_gap",
+      "formats": {
+        "short_form_video": {
+          "script": "HOOK: Your kid’s meltdown isn’t personal—it’s training data.\nSTORY: Quick contrast between reaction vs guidance.\nCTA: Try observing before correcting."
+        },
+        "newsletter_email": {
+          "subject": "The meltdown that changed how I parent",
+          "body": "We think discipline is about control, but it’s really about awareness..."
+        },
+        "linkedin_post": {
+          "text": "Ever feel like your child’s behavior mirrors your stress? ..."
+        }
+      },
+      "tags": ["parenting","confidence","mindset"],
+      "score_ref": {"clarity":5,"accuracy":4,"reusability":5}
+    }
+  ]
+}
+
+
+⸻
+
+Guardrails
+	•	Always output valid JSON only (no Markdown).
+	•	Each idea must include all three formats even if brief.
+	•	Keep platform-specific tone:
+	•	Instagram/TikTok → conversational, quick hook
+	•	Newsletter → reflective, actionable
+	•	LinkedIn → professional, insight-driven
+	•	If input Analyzer data is empty → return {"status":"error","reason":"No valid analysis records"}
+
+⸻
+
+CLEAR
+	•	Clarity: Explicit JSON schema, 3 defined formats
+	•	Logic: Trend → Idea → Format sequence
+	•	Efficiency: Limited to top Analyzer results
+	•	Accuracy: Retains engagement context from Analyzer
+	•	Reusability: Compatible with downstream publishing tools

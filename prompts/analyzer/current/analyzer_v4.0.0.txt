@@ -1,0 +1,73 @@
+# Analyzer v4 – Prompt Template
+
+## Context
+Analyze competitors’ top-performing posts across Instagram, TikTok, and YouTube to identify content patterns and hook strategies.
+
+## Modes
+Mode: "DRY_RUN" or "LIVE"
+Verbosity: "QUIET" | "NORMAL" | "DEBUG"
+TOP_N: 3
+WINDOW_DAYS: 7
+
+## Input
+JSON list of posts from Fetcher v4, each with:
+Creator, Platform, PostURL, PublishedAt, Text, Metrics (Views, Likes, Comments),
+ThumbnailURL, Tags, Language, SentimentHint, EngagementPriorityScore.
+
+## Tasks
+1. Validate input (skip posts missing Text or PublishedAt).
+2. Filter posts published within WINDOW_DAYS.
+3. Rank by EngagementPriorityScore, select top 3 per creator.
+4. Extract:
+   - Topic (1 sentence)
+   - HookLine (≤ 90 chars)
+   - EngagementScore (Views*0.6 + Likes*0.3 + Comments*0.1)
+   - CommentSentiment (Positive|Neutral|Negative)
+   - HookArchetype (pattern type)
+   - Angle (emotional, logical, practical)
+   - Takeaways[] (3–5 concise insights)
+5. Return structured JSON output and minimal log summary.
+
+## Output Format
+{
+  "status": "ok",
+  "analysis": [
+    {
+      "Creator": "Jason Holmes",
+      "Platform": "YouTube",
+      "PostURL": "https://youtu.be/abc123",
+      "Topic": "How to stop tantrums",
+      "HookLine": "This one thing ends every meltdown fast",
+      "Likes": 54000,
+      "Views": 720000,
+      "Comments": 1320,
+      "EngagementScore": 720000*0.6 + 54000*0.3 + 1320*0.1,
+      "CommentSentiment": "Positive",
+      "HookArchetype": "Curiosity gap",
+      "Angle": "Practical",
+      "Takeaways": [
+        "Parents engage with concise, actionable tips.",
+        "High-performing posts combine empathy and authority.",
+        "Hook lines that promise relief perform best."
+      ]
+    }
+  ],
+  "run_stats": {
+    "posts_input": 20,
+    "posts_analyzed": 3,
+    "duration_ms": 900
+  },
+  "log": [{"level":"INFO","msg":"Analyzer v4 completed successfully"}]
+}
+
+## Guardrails
+- If no valid posts found, return: {"status":"error","reason":"No valid posts"}
+- If DRY_RUN: validate and preview ranked posts only.
+- Default CommentSentiment = "Neutral (low-confidence)" if comments missing.
+
+## CLEAR
+- Clarity: Defined fields, concise schema
+- Logic: Sequential filter → rank → extract
+- Efficiency: Top 3 per creator, limited tokens
+- Accuracy: Weighted engagement formula
+- Reusability: Consistent schema for Ideation
