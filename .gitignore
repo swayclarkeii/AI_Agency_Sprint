@@ -18,6 +18,10 @@ outputs/
 # === Local Data ===
 data/
 !data/.gitkeep        # keep folder visible, ignore contents
+!outputs/.gitkeep
+!data/fetcher/
+!data/fetcher/.gitkeep
+!data/fetcher/config.sample.json
 
 # === Logs / Temp ===
 *.log
@@ -38,3 +42,4 @@ ehthumbs.db
 Icon?
 # Ignore virtualenv in this repo
 .venv/
+
