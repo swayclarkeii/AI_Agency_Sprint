@@ -11,17 +11,17 @@ __pycache__/
 .DS_Store
 
 # === Output / Runtime Files ===
-# Only runtime outputs sync to Google Drive (not tracked in Git)
-outputs/
-!outputs/.gitkeep     # keep folder structure visible
+outputs/*
+!outputs/.gitkeep
 
 # === Local Data ===
-data/
-!data/.gitkeep        # keep folder visible, ignore contents
-!outputs/.gitkeep
+data/*
+!data/.gitkeep
 !data/fetcher/
+data/fetcher/*
 !data/fetcher/.gitkeep
 !data/fetcher/config.sample.json
+
 
 # === Logs / Temp ===
 *.log
@@ -40,6 +40,5 @@ data/
 Thumbs.db
 ehthumbs.db
 Icon?
-# Ignore virtualenv in this repo
-.venv/
+
 
