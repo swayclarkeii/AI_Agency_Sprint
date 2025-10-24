@@ -1,16 +1,8 @@
 {
-  "mode": "DRY_RUN",
-  "run_id": "fetch_${ISO_NOW}",
-  "since_window_days": 7,
+  "window_days": 7,
   "targets": [
-    {
-      "creator_name": "The Calm Parent",
-      "platform": "instagram",
-      "handle_or_channel_id": "calmparenttips"
-    }
-  ],
-  "output_contract": {
-    "write_destination": "local_json",
-    "dataset_name": "fetcher"
-  }
+    { "creator": "calm_parent_tips", "platform": "instagram" },
+    { "creator": "parenting_daily", "platform": "tiktok" },
+    { "creator": "coach_dad", "platform": "youtube" }
+  ]
 }
