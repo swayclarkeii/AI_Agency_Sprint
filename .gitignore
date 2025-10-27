@@ -1,44 +1,30 @@
-# ==========================
-# AI_Agency_Sprint .gitignore
-# ==========================
-
-# === Environment / Local ===
+# Virtual Environment (NEVER commit this)
+.venv/
 venv/
-.venv/  
-.env
-*.pyc
+env/
+
+# Python
 __pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+.Python
+
+# Data & Outputs (keep local only)
+data/analyzer/runs/*.json
+data/ideation/runs/*.json
+data/ideation/exports/*.md
+logs/*.log
+*.csv
+!requirements.txt
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
 .DS_Store
 
-# === Output / Runtime Files ===
-outputs/*
-!outputs/.gitkeep
-
-# === Local Data ===
-data/*
-!data/.gitkeep
-!data/fetcher/
-data/fetcher/*
-!data/fetcher/.gitkeep
-!data/fetcher/config.sample.json
-
-
-# === Logs / Temp ===
-*.log
-*.tmp
-*.bak
-*.swp
-*.lock
-
-# === Platform Configs ===
-.idea/
-.vscode/
-.ipynb_checkpoints/
-*.code-workspace
-
-# === System Files ===
-Thumbs.db
-ehthumbs.db
-Icon?
-
-
+# Environment variables
+.env
+*.key
